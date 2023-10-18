@@ -18,7 +18,11 @@ class ExpressionMapper(ABC):
 class SingleExpressionMapper(ExpressionMapper):
     def __init__(self, expression: str):
 
-        single_expression_mapping = {"sin": sp.sin, "cos": sp.cos, "exp": sp.exp, "initial": ""
+        def square(x):
+            return x*x
+
+        single_expression_mapping = {"sin": sp.sin, "cos": sp.cos, "exp": sp.exp, "initial": "",
+                                     "sqrt": sp.sqrt, "square": square
                                      }
         if expression not in single_expression_mapping.keys():
             raise NotImplementedError(f"The current expression of {expression} is not implemented yet. Sorry!")
@@ -83,6 +87,16 @@ class CalculusAgent:
             self.expression = connector_expr.expression(converted_expression,
                                                         self.expression)
 
+    def set_outer_func_to_current_expression(self, outer_func: SingleExpressionMapper):
+        if not isinstance(outer_func, SingleExpressionMapper):
+            raise TypeError("outer_func must be of type SingleExpressionMapper")
+        self.expression = outer_func.expression(self.expression)
+
+    def set_binary_outer_func_to_current_expression(self, outer_func: DoubleExpressionMapper, var: float):
+        if not isinstance(outer_func, DoubleExpressionMapper):
+            raise TypeError("outer_func must be of type DoubleExpressionMapper")
+        self.expression = outer_func.expression(var, self.expression)
+
     def differentiate(self, variable: str):
         if variable not in self.variables_mapping.keys():
             raise ValueError(f"There is no variable set with the name of {variable}. "
@@ -98,7 +112,7 @@ class CalculusChatAgent(ExerciseAgent):
         self.template = """Du bist ein Tutor für Mathe Schüler der 12. Klasse am Gymnasium in Deutschland. Sie werden dir eine Frage über Ableitungen odder Integralen stellen.
                         Du bekommst die Funktion und die Lösung und sollst auf Basis dieser eine Antwort auf die Frage des Schülers geben. Bitte bleibe konkret, halluziniere nicht und
                         schreibe "Ich weiß es nicht", wenn du dir nicht sicher bist. Motiviere die Schüler und verwende konkrete Beispiele.
-                        Es geht um folgende Funktion: ###{aufgabe}###. Sie hat folgende Ableitung ###{loesung}###. {verlauf}.
-                        Fasse dich kurz, klar und verständlich: {frage}"""
+                        Es geht um folgende Funktion: f(x) = {aufgabe}. Sie hat folgende Ableitung f'(x) = {loesung}. {verlauf}.
+                        Beantworte diese Frage möglichst kurz und verständlich: {frage}"""
 
 
