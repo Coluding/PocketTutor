@@ -2,7 +2,7 @@ from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv
 from ExerciseAgent import ExerciseAgent
-
+from CalculusAgent import *
 
 def main():
     aufgabe = """2x 
@@ -97,8 +97,15 @@ def main():
     {4;2}"""
     load_dotenv("../../.env")
     e = ExerciseAgent(ChatOpenAI())
-    print(e.run(aufgabe, loesung, "warum nutzen wir die diskriminate hier?"))
-    print(e.run(aufgabe, loesung, "Warum ist es wichtig ob sie größer als 0 ist?"))
+    c = CalculusAgent()
+    c.set_variable("x", "y")
+    c.set_expression(SingleExpressionMapper("sin"), SingleExpressionMapper("initial"), "x")
+    c.set_expression(SingleExpressionMapper("sin"), DoubleExpressionMapper("div"), "y")
+    chat = CalculusChatAgent(ChatOpenAI())
+    print(c.differentiate("x"))
+    print(chat.run(c.expression, c.differentiate("x"), "Warum ist das die Lösung?"))
+    #print(e.run(aufgabe, loesung, "warum nutzen wir die diskriminate hier?"))
+    #print(e.run(aufgabe, loesung, "Warum ist es wichtig ob sie größer als 0 ist?"))
 
 
 if __name__ == "__main__":
