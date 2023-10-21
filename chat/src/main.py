@@ -5,96 +5,35 @@ from ExerciseAgent import ExerciseAgent
 from CalculusAgent import *
 
 def main():
-    aufgabe = """2x 
-    2
-     +16=12x"""
+    aufgabe = """Gegeben ist die Funktion f: 
+x↦ln(x−3) mit maximaler Definitionsmenge 
+D und Ableitungsfunktion 
+f 
+′
+ .
 
-    loesung = """2x 
-    2
-     +16	
-    =	
-    12x	
-    −12x
-    0	
-    =	
-    2x 
-    2
-     −12x+16	
-    ↓
-    Diskriminante berechnen
+Geben Sie 
+D sowie die Nullstelle von 
+f an."""
 
-    D	
-    =	
-    (−12) 
-    2
-     −4⋅2⋅16	
-    =	
-    144−128	
-    =	
-    16	
-    ⇒16	
-    >	
-    0	
-    ↓
-    daher 2 Lösungen
+    loesung ="""Das Argument 
+(x−3) der 
+ln-Funktion muss größer 0 sein.
 
-    2x 
-    2
-     +16	
-    =	
-    2x	
-    ↓
-    In die Mitternachtsformel einsetzen dabei die berechnete Diskriminante einsetzen
+Also muss gelten:
 
-    x 
-    1,2
-    ​
+x−3>0
+Somit muss 
+x>3 sein.
 
-    =	
-    2⋅2
-    12± 
-    16
-    ​
+Zur Nullstelle: Die 
+ln-Funktion hat den Wert 0, wenn das Argument 
+x−3=1 ist.
 
-    ​
-
-    ↓
-    x 
-    1
-    ​
-      berechnen
-
-    x 
-    1
-    ​
-
-    =	
-    4
-    12+4
-    ​
-
-    =	
-    4
-    16
-    ​
-     =4	
-    x 
-    2
-    ​
-
-    =	
-    4
-    12−4
-    ​
-
-    =	
-    4
-    8
-    ​
-     =2	
-    L	
-    =	
-    {4;2}"""
+Also 
+f(x)=0, genau dann, wenn 
+x−3=1. Damit ist die Nullstelle (nach Umstellen) 
+x=4."""
     load_dotenv("../../.env")
     e = ExerciseAgent(ChatOpenAI())
     c = CalculusAgent()
@@ -106,8 +45,8 @@ def main():
     chat = CalculusChatAgent(ChatOpenAI())
     print(c.expression)
     print(c.differentiate("x"))
-    print(chat.run(c.expression, c.differentiate("x"), "Wie kommt man auf die -0.5 in der Ableitung?"))
-    #print(e.run(aufgabe, loesung, "warum nutzen wir die diskriminate hier?"))
+    #print(chat.run(c.expression, c.differentiate("x"), "Wie kommt man auf die -0.5 in der Ableitung?"))
+    print(e.run(aufgabe, loesung, "Warum muss x größer als 3 sein? Erkläre es mir in einfachen Worten"))
     #print(e.run(aufgabe, loesung, "Warum ist es wichtig ob sie größer als 0 ist?"))
 
 
